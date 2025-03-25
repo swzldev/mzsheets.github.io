@@ -1,0 +1,76 @@
+body {
+    background-image: #f0f0f0;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.page-content {
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.login-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    width: 500px;
+    padding: 20px;
+    border: 1px solid #e0e0e0;
+    border-radius: 5px;
+    background-color: #f0f0f0;
+    margin: auto;
+}
+.login-container h1 {
+    font-family: 'Roboto Slab', sans-serif;
+    font-size: 1.5em;
+    margin: 20px 0;
+    color: #333;
+    display: block;
+}
+.login-inputs-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 150px;
+}
+.login-input-container {
+    width: 100%;
+    display: flex;
+}
+.login-container label {
+    font-family: 'Roboto Slab', sans-serif;
+    font-size: 1em;
+    color: #333;
+    margin: auto 10px;
+    width: 100px;
+}
+.login-container input {
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #e0e0e0;
+    outline: none;
+    border-radius: 0px;
+}
+.login-container button {
+    font-family: 'Roboto Slab', sans-serif;
+    padding: 10px;
+    width: 150px;
+    margin: 10px 0;
+    background-color: #333;
+    box-shadow: 
+        0 0 0 2px #f0f0f0,
+        0 0 0 4px #333;
+    color: #f0f0f0;
+    outline: none;
+    border-radius: 0px;
+    cursor: pointer;
+}
+.login-button {
+    margin-top: 50px;
+}

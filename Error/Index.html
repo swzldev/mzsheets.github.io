@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../Components/globalstyle.css">
+    <link rel="stylesheet" href="style.css">
+    <title>ERROR | MZSHEETS</title>
+</head>
+<body>
+    <div id="top"></div>
+    <div id="main-navbar"></div>
+    <div class="page-content">
+        <h1 class="error-title">ERROR TITLE</h1>
+        <p class="error-message">ERROR MESSAGE</p>
+    </div>
+    <script>
+        // Get query parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const errorCode = urlParams.get('error-code');
+        const errorTitle = urlParams.get('error-title');
+        const errorMessage = urlParams.get('error-msg');
+
+        // Load the navbar
+        fetch('../Components/navbar.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('main-navbar').innerHTML = data;
+            })
+            .catch(error => console.error('Error loading navbar:', error)
+        );
+
+        // Load the error message
+        document.querySelector('.error-title').innerText = errorTitle;
+        document.querySelector('.error-message').innerText = errorMessage;
+    </script>
+</body>
+</html>

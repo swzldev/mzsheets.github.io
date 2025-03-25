@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../Components/globalstyle.css">
+    <link rel="stylesheet" href="style.css">
+    <title>HOME | MZSHEETS</title>
+</head>
+<body>
+    <div id="top"></div>
+    <div id="main-navbar"></div>
+    <div class="page-content">
+        <img alt="Item image" class="item-thumbnail">
+        <h1 class="item-name"></h1>
+        <a href="../Error/Index.html?error-code=404&error-title=Item not found&error-msg=The item you are looking for does not exist." class="item-link">View item</a>
+    </div>
+    <script>
+        // Get query parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const id = urlParams.get('id') ? parseInt(urlParams.get('id')) : null;
+
+        // Load the navbar
+        fetch('../Components/navbar.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('main-navbar').innerHTML = data;
+            })
+            .catch(error => console.error('Error loading navbar:', error)
+        );
+
+        // Get item by ID
+        fetch('../Data/products-data.json')
+            .then(response => response.json())
+            .then(data => {
+                if (!id) {
+                    window.location.href = '../Error/Index.html?error-code=400&error-title=Bad Request&error-msg=The request could not be understood by the server due to malformed syntax.';
+                }
+                const item = data.find(item => item.id === id);
+                if (!item) {
+                    window.location.href = '../Error/Index.html?error-code=404&error-title=Item not found&error-msg=The item you are looking for does not exist.';
+                }
+                
+                // Load the items information
+                document.querySelector('.item-thumbnail').src = item.image;
+                document.querySelector('.item-name').innerText = item.name;
+                document.querySelector('.item-link').href = item.link;
+            })
+            .catch(error => console.error('Error loading item:', error)
+        );
+    </script>
+</body>
+</html>

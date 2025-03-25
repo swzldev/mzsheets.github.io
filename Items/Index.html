@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../Components/globalstyle.css">
+    <link rel="stylesheet" href="style.css">
+    <title>HOME | MZSHEETS</title>
+</head>
+<body>
+    <div id="top"></div>
+    <div id="main-navbar"></div>
+    <div class="page-content">
+        <div class="page-header">
+            <h1 class="page-title">ITEMS</h1>
+        </div>
+    </div>
+    <div class="store-content-header">
+        <div class="store-content-selection-container">
+            <p>Sort by: </p>
+            <select name="sort-by" class="store-sort-by-option">
+                <option value="default" selected>Default</option>
+                <option value="a-z">Name: A to Z</option>
+                <option value="price-low-to-high">Price: Low to High</option>
+                <option value="price-high-to-low">Price: High to Low</option>
+            </select>
+        </div>
+        <div class="store-content-selection-container">
+            <p>Currency: </p>
+            <select name="currency" class="store-currency-option">
+                <option value="gbp" selected>GBP (£)</option>
+                <option value="usd">USD ($)</option>
+                <option value="eur">EUR (€)</option>
+            </select>
+        </div>
+        <div class="store-content-selection-container">
+            <p>Items per row: </p>
+            <select name="items-per-row" class="store-items-per-row-option">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3" selected>3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+            </select>
+        </div>
+        <div class="store-content-selection-container">
+            <p>Rows per page: </p>
+            <select name="rows-per-page" class="store-rows-per-page-option">
+                <option value="4">4</option>
+                <option value="8" selected>8</option>
+                <option value="16">16</option>
+                <option value="32">32</option>
+                <option value="64">64</option>
+                <option value="128">128</option>
+            </select>
+        </div>
+    </div>
+    <div id="store-content"></div>
+    <div class="store-controls">
+        <div class="store-controls-info">
+            <p class="store-control-page-info">Page <input type="number" name="page" class="store-control-page-number-input"></input> of&nbsp<p class="store-control-page-count">???</p></p>
+        </div>
+        <div class="store-controls-page-buttons">
+            <button class="store-controls-page-buttons-dec">&lt</button>
+            <button class="store-controls-page-buttons-inc">&gt</button>
+        </div>
+        <a href="#top" class="store-controls-back-to-top">Back to top</a>
+    </div>
+    <script>
+        // Display options
+        const numItemsPerRow = 3; // Default number of items per row
+        const numRowsPerPage = 8; // Default number of rows per page
+
+        // Get query parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const query = urlParams.get('query') ? urlParams.get('query').toLowerCase() : '';
+        const category = urlParams.get('category');
+        const sortBy = urlParams.get('sort-by') ? urlParams.get('sort-by') : 'default';
+        const currency = urlParams.get('currency') ? urlParams.get('currency') : 'gbp';
+        const itemsPerRow = urlParams.get('items-per-row') ? parseInt(urlParams.get('items-per-row')) : numItemsPerRow;
+        const rowsPerPage = urlParams.get('rows') ? parseInt(urlParams.get('rows')) : numRowsPerPage;
+        const currentPage = urlParams.get('page') ? parseInt(urlParams.get('page')) : 1;
+
+        // Set title
+        if (category) {
+            document.querySelector('.page-title').textContent = category.toUpperCase();
+        } else {
+            document.querySelector('.page-title').textContent = 'ITEMS';
+        }
+
+        // Set filter options
+        document.querySelector('.store-sort-by-option').value = sortBy;
+        document.querySelector('.store-currency-option').value = currency;
+        document.querySelector('.store-items-per-row-option').value = itemsPerRow;
+        document.querySelector('.store-rows-per-page-option').value = rowsPerPage;
+
+        // Load the navbar
+        fetch('../Components/navbar.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('main-navbar').innerHTML = data;
+
+                // Set query if it exists
+                document.getElementById('navbar-search-input').value = query;
+
+                // Handle search input
+                document.getElementById('navbar-search-input').addEventListener('input', (event) => {
+                    const inQuery = event.target.value.toLowerCase(); // Get the search query
+
+                    const url = new URL(window.location);
+                    url.searchParams.set('query', inQuery);
+                    window.history.pushState({}, '', url);
+                    
+                    // Filter items by category
+                    let filteredItems = allItems;
+                    if (category) {
+                        filteredItems = filteredItems.filter(item => 
+                            item.category && item.category.toLowerCase() === category.toLowerCase()
+                        );
+                    }
+
+                    // Further filter items by the search query
+                    filteredItems = filteredItems.filter(item =>
+                        item.name.toLowerCase().includes(inQuery) || // Match item name
+                        (item.description && item.description.toLowerCase().includes(inQuery)) // Match description
+                    );
+                    displayItems(filteredItems);
+                });
+
+                // Handle sort by option
+                document.querySelector('.store-sort-by-option').addEventListener('change', (event) => {
+                    const sortByOption = event.target.value; // Get the sort by option
+
+                    const url = new URL(window.location);
+                    url.searchParams.set('sort-by', sortByOption);
+                    window.location.href = url;
+                });
+
+                // Handle currency option
+                document.querySelector('.store-currency-option').addEventListener('change', (event) => {
+                    const currencyOption = event.target.value; // Get the currency option
+
+                    const url = new URL(window.location);
+                    url.searchParams.set('currency', currencyOption);
+                    window.location.href = url;
+                });
+
+                // Handle items per row option
+                document.querySelector('.store-items-per-row-option').addEventListener('change', (event) => {
+                    const itemsPerRowOption = event.target.value; // Get the items per row option
+
+                    const url = new URL(window.location);
+                    url.searchParams.set('items-per-row', itemsPerRowOption);
+                    window.location.href = url;
+                });
+
+                // Handle rows per page option
+                document.querySelector('.store-rows-per-page-option').addEventListener('change', (event) => {
+                    const rowsPerPageOption = event.target.value; // Get the rows per page option
+
+                    const url = new URL(window.location);
+                    url.searchParams.set('rows', rowsPerPageOption);
+                    window.location.href = url;
+                });
+            })
+            .catch(error => console.error('Error loading navbar:', error)
+        );
+
+        // Store items
+        let allItems = [];
+
+        // Load default items
+        fetch('../Data/products-data.json')
+            .then(response => response.json())
+            .then(items => {
+                allItems = items;
+
+                // Filter items by category if the 'category' parameter exists
+                if (category) {
+                    const filteredItems = allItems.filter(item => item.category && item.category.toLowerCase() === category.toLowerCase());
+                    displayItems(filteredItems);
+                } else {
+                    displayItems(items);
+                }
+            })
+            .catch(error => console.error('Error loading store items:', error));
+
+        // Listen for page change events
+        document.querySelector('.store-controls-page-buttons').addEventListener('click', (event) => {
+            if (event.target.tagName === 'BUTTON') {
+                const direction = event.target.textContent; // Get the direction of the page change
+                const newPage = direction === '<' ? currentPage - 1 : currentPage + 1; // Calculate the new page
+
+                // Update the URL with the new page
+                const url = new URL(window.location);
+                url.searchParams.set('page', newPage);
+                window.location.href = url;
+            }
+        });
+        document.querySelector('.store-control-page-number-input').addEventListener('change', (event) => {
+            const newPage = parseInt(event.target.value); // Get the new page
+
+            // Update the URL with the new page
+            const url = new URL(window.location);
+            url.searchParams.set('page', newPage);
+            window.location.href = url;
+        });
+    
+        // Load the store content
+        function displayItems(items) {
+            const numItemsPerPage = itemsPerRow * rowsPerPage; // Number of items per page
+            const totalPages = Math.ceil(items.length / numItemsPerPage); // Calculate total pages
+
+            let page = currentPage;
+
+            // Ensure currentPage is within bounds
+            if (page < 1) {
+                page = 1;
+
+                // Update the URL to reflect the corrected page number
+                const url = new URL(window.location);
+                url.searchParams.set('page', page);
+                window.history.replaceState({}, '', url);
+            }
+            if (page > totalPages) {
+                page = totalPages;
+
+                // Update the URL to reflect the corrected page number
+                const url = new URL(window.location);
+                url.searchParams.set('page', page);
+                window.history.replaceState({}, '', url);
+            }
+
+            // Update page info
+            document.querySelector('.store-control-page-number-input').value = page;
+            document.querySelector('.store-control-page-count').textContent = totalPages;
+
+            // Disable/enable buttons based on page limits
+            const prevButton = document.querySelector('.store-controls-page-buttons-dec');
+            const nextButton = document.querySelector('.store-controls-page-buttons-inc');
+            prevButton.disabled = page === 1;
+            nextButton.disabled = page === totalPages;
+
+            // Sort items by the selected option
+            if (sortBy === 'a-z') {
+                items = items.sort((a, b) => a.name.localeCompare(b.name));
+            } else if (sortBy === 'price-low-to-high') {
+                items = items.sort((a, b) => a.price - b.price);
+            } else if (sortBy === 'price-high-to-low') {
+                items = items.sort((a, b) => b.price - a.price);
+            }
+
+            // Slice items by page
+            const startIndex = (page - 1) * numItemsPerPage;
+            const endIndex = startIndex + numItemsPerPage;
+            items = items.slice(startIndex, endIndex);
+
+            const storeContent = document.getElementById('store-content');
+            storeContent.innerHTML = ''; // Clear existing content
+
+            // Create container
+            const container = document.createElement('div');
+            container.className = 'component-item-container';
+            container.style.gridTemplateColumns = `repeat(${itemsPerRow}, 1fr)`;
+            storeContent.appendChild(container);
+
+            // Fetch the itemcard component
+            fetch('../Components/itemcard.html')
+                .then(response => response.text())
+                .then(template => {
+                    items.forEach(item => {
+                        // Create a new element for each item
+                        const itemCard = document.createElement('div');
+                        itemCard.innerHTML = template;
+
+                        // Populate the itemcard with data
+                        itemCard.querySelector('.item-card-content-container').href = item.link;
+                        itemCard.querySelector('.item-card-image').src = item.image;
+                        itemCard.querySelector('.item-card-image').alt = item.name;
+                        itemCard.querySelector('.item-card-title').textContent = item.name;
+                        itemCard.querySelector('.item-card-price').textContent = `${getPriceString(convertCurrency(item.price, item.currency, currency), currency)}`;
+
+                        // Append the populated itemcard to the container
+                        container.appendChild(itemCard);
+                    });
+                })
+                .catch(error => console.error('Error loading itemcard component:', error));
+        }
+
+        // Function to convert currencies
+        function convertCurrency(amount, fromCurrency, toCurrency) {
+            // Conversion rates
+            const conversionRates = {
+                gbp: 0.77,
+                usd: 1,
+                eur: 0.93
+            };
+
+            // Convert the amount
+            return amount * conversionRates[toCurrency] / conversionRates[fromCurrency];
+        }
+
+        // Function to get prices in the selected currency as a string
+        function getPriceString(amount, currency) {
+            const currencySymbols = {
+                gbp: '£',
+                usd: '$',
+                eur: '€'
+            };
+
+            return `${currencySymbols[currency]}${String(amount.toFixed(2))}`;
+        }
+    </script>
+</body>
+</html>
