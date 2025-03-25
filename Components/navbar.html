@@ -4,9 +4,7 @@
         <input type="text" spellcheck="false" placeholder="Search..." id="navbar-search-input">
         <ul>
             <li><a
-                href=""
-                onmouseleave="document.querySelector('.navbar-items-dropdown-container').style.display = 'none';"
-                onmouseenter="document.querySelector('.navbar-items-dropdown-container').style.display = 'block';"
+                onclick="const displayMode = document.querySelector('.navbar-items-dropdown-container').style.display; document.querySelector('.navbar-items-dropdown-container').style.display = displayMode === 'block' ? 'none' : 'block';"
                 >Items</a></li>
             <li><a href="../Wishlist/">Wishlist</a></li>
         </ul>
