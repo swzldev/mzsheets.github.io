@@ -11,6 +11,7 @@
     backdrop-filter: blur(20px);
     border-bottom: 1px solid #333;
     box-sizing: border-box;
+    overflow: visible;
 }
 .navbar-container {
     display: flex;
@@ -18,12 +19,60 @@
     align-items: center;
     padding: 20px;
 }
+.navbar-items-dropdown-container {
+    display: none;
+    position: absolute;
+    top: calc(100% + 1px);
+    left: 0;
+    background-color: #f0f0f0;
+    border-bottom: 1px solid #333;
+    backdrop-filter: blur(20px);
+    box-sizing: border-box;
+    width: 100%;
+    z-index: 1000;
+    padding: 50px;
+}
+.navbar-items-dropdown-container ul {
+    list-style-type: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    row-gap: 1px;
+    width: fit-content;
+}
+.navbar-items-dropdown-container ul li {
+    margin: 0;
+    padding: 0;
+}
+.navbar-items-dropdown-container ul li h3 {
+    font-family: 'Roboto Slab', sans-serif;
+    font-optical-sizing: auto;
+    font-size: 1.1em;
+    font-style: normal;
+    font-weight: 800;
+    padding: 0;
+    margin: 0;
+    margin-bottom: 5px;
+    color: #333;
+}
+.navbar-items-dropdown-container ul li a {
+    font-family: 'Roboto Slab', sans-serif;
+    font-optical-sizing: auto;
+    font-size: 0.9em;
+    font-style: normal;
+    padding: 0;
+    margin: 0;
+    color: #333;
+    text-decoration: none;
+    transition-duration: 200ms;
+}
 .component-page-navbar a {
     font-family: 'Roboto Slab', sans-serif;
     font-optical-sizing: auto;
     font-size: 1em;
     font-style: normal;
     color: #333;
+    cursor: pointer;
     text-decoration: none;
     transition-duration: 200ms;
 }
@@ -130,6 +179,74 @@
     font-style: normal;
     margin: 10px;
     cursor: pointer;
+}
+
+
+/* Wishlist card style */
+.component-wishlist-card {
+    background-color: white;
+    border: 1px solid #e0e0e0;
+    display: flex;
+    width: 100%;
+    height: 200px;
+    box-sizing: border-box;
+    border-radius: 20px;
+}
+.wishlist-card-image-container {
+    height: auto;
+    margin: auto auto auto 100px;
+    overflow: hidden;
+    padding: 0;
+}
+.component-wishlist-card img {
+    max-width: 100%;
+    max-height: 150px;
+    margin: auto;
+    object-fit: contain;
+}
+.wishlist-card-details {
+    display: flex;
+    flex-direction: column;
+    margin: auto 100px;
+    text-align: right;
+}
+.wishlist-card-details h3 {
+    font-family: "Roboto Slab", sans-serif;
+    font-optical-sizing: auto;
+    font-size: 1.1em;
+    font-style: normal;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+.wishlist-card-details p {
+    font-family: "Roboto Slab", sans-serif;
+    font-optical-sizing: auto;
+    font-size: 0.9em;
+    font-style: normal;
+    color: #333;
+    margin: 15px 0;
+    padding: 0;
+}
+.wishlist-card-controls {
+    margin: 10px 0 0 auto;
+}
+.wishlist-card-controls a {
+    font-family: 'Roboto Slab', sans-serif;
+    font-size: 0.8em;
+    margin-left: 5px;
+    background-color: #00000000;
+    text-decoration: underline;
+    color: #333;
+    border: none;
+    outline: none;
+    border-radius: 0px;
+    cursor: pointer;
+    transition: color 200ms ease;
+}
+.wishlist-card-controls button:hover, a:hover {
+    color: #999;
+    transition: color 200ms ease;
 }
 
 

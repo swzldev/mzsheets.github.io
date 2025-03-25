@@ -13,12 +13,18 @@
     <div class="page-content">
         <img alt="Item image" class="item-thumbnail">
         <h1 class="item-name"></h1>
-        <a href="../Error/Index.html?error-code=404&error-title=Item not found&error-msg=The item you are looking for does not exist." class="item-link">View item</a>
+        <p class="item-price"></p>
+        <div class="item-controls">
+            <a href="../Error/Index.html?error-code=404&error-title=Item not found&error-msg=The item you are looking for does not exist." class="item-link">View item</a>
+            <a href="../Wishlist/" onclick="addToWishlist()" class="wishlist-button">Wishlist</button>
+        </div>
     </div>
     <script>
         // Get query parameters
         const urlParams = new URLSearchParams(window.location.search);
         const id = urlParams.get('id') ? parseInt(urlParams.get('id')) : null;
+
+        let item = null;
 
         // Load the navbar
         fetch('../Components/navbar.html')
@@ -36,7 +42,7 @@
                 if (!id) {
                     window.location.href = '../Error/Index.html?error-code=400&error-title=Bad Request&error-msg=The request could not be understood by the server due to malformed syntax.';
                 }
-                const item = data.find(item => item.id === id);
+                item = data.find(item => item.id === id);
                 if (!item) {
                     window.location.href = '../Error/Index.html?error-code=404&error-title=Item not found&error-msg=The item you are looking for does not exist.';
                 }
@@ -45,9 +51,81 @@
                 document.querySelector('.item-thumbnail').src = item.image;
                 document.querySelector('.item-name').innerText = item.name;
                 document.querySelector('.item-link').href = item.link;
+
+                // Get currency if available
+                const currency = getCookie('currency') || 'usd';
+                document.querySelector('.item-price').innerText = getPriceString(convertCurrency(item.price, item.currency, currency), currency);
             })
             .catch(error => console.error('Error loading item:', error)
         );
+
+        // Function to convert currencies
+        function convertCurrency(amount, fromCurrency, toCurrency) {
+            // Conversion rates
+            const conversionRates = {
+                gbp: 0.77,
+                usd: 1,
+                eur: 0.93
+            };
+
+            // Convert the amount
+            return amount * conversionRates[toCurrency] / conversionRates[fromCurrency];
+        }
+
+        // Function to get prices in the selected currency as a string
+        function getPriceString(amount, currency) {
+            const currencySymbols = {
+                gbp: '£',
+                usd: '$',
+                eur: '€'
+            };
+
+            return `${currencySymbols[currency]}${String(amount.toFixed(2))}`;
+        }
+
+        // Set a cookie
+        function setCookie(cname, cvalue, exdays) {
+            var d = new Date();
+            d.setTime(d.getTime() + (exdays*24*60*60*1000));
+            var expires = "expires="+ d.toUTCString();
+            document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+        }
+
+        // Get a cookie
+        function getCookie(cname) {
+            var name = cname + "=";
+            var decodedCookie = decodeURIComponent(document.cookie);
+            var ca = decodedCookie.split(';');
+            for(var i = 0; i <ca.length; i++) {
+                var c = ca[i];
+                while (c.charAt(0) == ' ') {
+                    c = c.substring(1);
+                }
+                if (c.indexOf(name) == 0) {
+                    return c.substring(name.length, c.length);
+                }
+            }
+            return "";
+        }
+
+        // Add an item to the wishlist
+        function addToWishlist() {
+            if (!item) {
+                alert('Item not found!');
+                return;
+            }
+
+            let wishlist = getCookie('wishlist');
+            wishlist = wishlist ? JSON.parse(wishlist) : [];
+
+            // Check if the item already exists in the wishlist by its ID
+            if (!wishlist.some(wishlistItem => wishlistItem.id === item.id)) {
+                wishlist.push(item);
+                setCookie('wishlist', JSON.stringify(wishlist), 365); // Store for 265 days
+            } else {
+                alert('Item is already in the wishlist!');
+            }
+        }
     </script>
 </body>
 </html>

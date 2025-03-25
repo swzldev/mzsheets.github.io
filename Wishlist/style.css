@@ -1,0 +1,91 @@
+body {
+    background-color: #eee;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.page-content {
+    margin-top: 60px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+}
+
+.wishlist-container {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: center;
+    text-align: center;
+    margin: 100px;
+    border: 1px solid #333;
+    background-color: #f0f0f0;
+    width: calc(100% - 1000px);
+}
+.wishlist-items-container {
+    margin: 20px;
+}
+.wishlist-container ul {
+    list-style-type: none;
+    padding: 0;
+}
+.wishlist-container ul li {
+    padding: 10px;
+}
+.wishlist-summary-container {
+    background-color: #fff;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    text-align: right;
+}
+.wishlist-summary-container h2 {
+    font-family: 'Roboto Slab', sans-serif;
+    font-size: 1.4em;
+    margin: 0 20px;
+    padding-top: 20px;
+    color: #333;
+    display: block;
+}
+.wishlist-summary-container p {
+    font-family: 'Roboto Slab', sans-serif;
+    font-size: 0.7em;
+    padding-bottom: 20px;
+    margin: 0 20px;
+    color: #333;
+    display: block;
+}
+.wishlist-header {
+    font-family: 'Roboto Slab', sans-serif;
+    font-size: 2em;
+    margin: 0;
+    margin-top: 20px;
+    text-decoration: underline;
+    color: #333;
+    display: block;
+}
+.wishlist-empty-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin: 100px 0;
+    background-color: #f0f0f0;
+}
+.wishlist-empty-panel h2 {
+    font-family: 'Roboto Slab', sans-serif;
+    font-size: 1.5em;
+    margin: 20px 0;
+    color: #333;
+    display: block;
+}
+.wishlist-empty-panel p {
+    font-family: 'Roboto Slab', sans-serif;
+    font-size: 1em;
+    margin: 20px 0;
+    color: #333;
+    display: block;
+}

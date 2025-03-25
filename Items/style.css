@@ -24,7 +24,7 @@ body {
     padding: 15px;
     border: 1px solid #e0e0e0;
 }
-.store-content-header p, a {
+.store-content-header p, .store-content-header a {
     font-family: 'Roboto Slab', sans-serif;
     font-size: 1em;
     color: #333;

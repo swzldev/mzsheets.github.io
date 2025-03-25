@@ -1,17 +1,24 @@
 <nav class="component-page-navbar">
     <div class="navbar-container">
-        <a class="navbar-title" href="../Home/Index.html">MZSHEETS</a>
+        <a class="navbar-title" href="../Items/">MZSHEETS</a>
         <input type="text" spellcheck="false" placeholder="Search..." id="navbar-search-input">
         <ul>
-            <li><a href="../Items/Index.html">All items</a></li>
-            <li><a href="../Items/Index.html?category=shoes">Shoes</a></li>
-            <li><a href="../Items/Index.html?category=hoodies-sweaters">Hoodies/Sweaters</a></li>
-            <li><a href="../Items/Index.html?category=t-shirts">T-Shirts</a></li>
-            <li><a href="../Items/Index.html?category=jackets">Jackets</a></li>
-            <li><a href="../Items/Index.html?category=pants-shorts">Pants/Shorts</a></li>
-            <li><a href="../Items/Index.html?category=headwear">Headwear</a></li>
-            <li><a href="../Items/Index.html?category=accessories">Accessories</a></li>
-            <li><a href="../Items/Index.html?category=other-stuff">Other stuff</a></li>
+            <li><a onmouseenter="document.querySelector('.navbar-items-dropdown-container').style.display = 'block';">Items</a></li>
+            <li><a href="../Wishlist/">Wishlist</a></li>
+        </ul>
+    </div>
+    <div onmouseleave="document.querySelector('.navbar-items-dropdown-container').style.display = 'none';" class="navbar-items-dropdown-container">
+        <ul class="navbar-items-dropdown">
+            <li><h3>Clothing</h3></li>
+            <li><a href="../Items/">All Items</a></li>
+            <li><a href="../Items/?category=shoes">Shoes</a></li>
+            <li><a href="../Items/?category=hoodies-sweaters">Hoodies/Sweaters</a></li>
+            <li><a href="../Items/?category=t-shirts">T-Shirts</a></li>
+            <li><a href="../Items/?category=jackets">Jackets</a></li>
+            <li><a href="../Items/?category=pants-shorts">Pants/Shorts</a></li>
+            <li><a href="../Items/?category=headwear">Headwear</a></li>
+            <li><a href="../Items/?category=accessories">Accessories</a></li>
+            <li><a href="../Items/?category=other-stuff">Other stuff</a></li>
         </ul>
     </div>
 </nav>

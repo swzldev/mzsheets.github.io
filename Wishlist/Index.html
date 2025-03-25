@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../Components/globalstyle.css">
+    <link rel="stylesheet" href="style.css">
+    <title>HOME | MZSHEETS</title>
+</head>
+<body>
+    <div id="top"></div>
+    <div id="main-navbar"></div>
+    <div class="page-content">
+        <div class="wishlist-container">
+            <h1 class="wishlist-header">My Wishlist</h1>
+            <div class="wishlist-items-container">
+                <ul>
+                    <li>Item</li>
+                </ul>
+            </div>
+            <div style="display: none;" class="wishlist-empty-panel">
+                <h2>Your wishlist is empty</h2>
+                <p>Find some items you like and click the heart icon to add them to your wishlist</p>
+            </div>
+            <div class="wishlist-summary-container">
+                <h2 class="wishlist-total">Total: ???</h2>
+                <p>(not incl. shipping/extra costs)</p>
+            </div>
+        </div>
+    </div>
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const sender = urlParams.get('sender') || null;
+
+        // Load the navbar
+        fetch('../Components/navbar.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('main-navbar').innerHTML = data;
+
+                document.getElementById('navbar-search-input').addEventListener('input', () => {
+                    const searchQuery = document.getElementById('navbar-search-input').value.toLowerCase();
+                    
+                    // Go to items page with search query
+                    if (searchQuery.length > 0) {
+                        window.location.href = `../Items/?query=${searchQuery}`;
+                    }
+                });
+            })
+            .catch(error => console.error('Error loading navbar:', error)
+        );
+
+        // Load the wishlist
+        document.addEventListener('DOMContentLoaded', () => {
+            displayWishlist();
+            updateSummary();
+        });
+
+        // Display the wishlist
+        function displayWishlist() {
+            const wishlist = getCookie('wishlist') ? JSON.parse(getCookie('wishlist')) : [];
+            const wishlistContainer = document.querySelector('.wishlist-items-container ul');
+            wishlistContainer.innerHTML = ''; // Clear existing items
+
+            // Display empty panel if wishlist is empty and hide summary
+            if (wishlist.length === 0) {
+                document.querySelector('.wishlist-items-container').style.display = 'none';
+                document.querySelector('.wishlist-empty-panel').style.display = 'block';
+                document.querySelector('.wishlist-summary-container').style.display = 'none';
+                return;
+            }
+
+            wishlist.forEach(item => {
+                const listItem = document.createElement('li');
+                fetch('../Components/wishlistcard.html')
+                    .then(response => response.text())
+                    .then(data => {
+                        listItem.innerHTML = data;
+                        listItem.querySelector('.wishlist-card-image').src = item.image;
+                        listItem.querySelector('.wishlist-card-title').innerText = item.name;
+
+                        // Get currency if available
+                        const currency = getCookie('currency') || 'usd';
+                        listItem.querySelector('.wishlist-card-price').innerText = getPriceString(convertCurrency(item.price, item.currency, currency), currency);
+                        
+                        listItem.querySelector('.wishlist-card-remove').addEventListener('click', () => {
+                            // Remove the item from the wishlist
+                            const updatedWishlist = wishlist.filter(wishlistItem => wishlistItem.id !== item.id);
+                            setCookie('wishlist', JSON.stringify(updatedWishlist), 7);
+                            displayWishlist();
+                            updateSummary();
+                        });
+
+                        listItem.querySelector('.wishlist-card-link').href = item.link;
+                    })
+                    .catch(error => console.error('Error loading wishlist card:', error)
+                );
+
+                wishlistContainer.appendChild(listItem);
+            });
+        }
+
+        // Update the wishlist summary
+        function updateSummary() {
+            const wishlist = getCookie('wishlist') ? JSON.parse(getCookie('wishlist')) : [];
+            const currency = getCookie('currency') || 'usd';
+            const total = wishlist.reduce((acc, item) => acc + convertCurrency(item.price, item.currency, currency), 0);
+            document.querySelector('.wishlist-total').innerText = `Total: ${getPriceString(total, currency)}`;
+        }
+
+        // Set a cookie
+        function setCookie(cname, cvalue, exdays) {
+            var d = new Date();
+            d.setTime(d.getTime() + (exdays*24*60*60*1000));
+            var expires = "expires="+ d.toUTCString();
+            document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+        }
+
+        // Get a cookie
+        function getCookie(cname) {
+            var name = cname + "=";
+            var decodedCookie = decodeURIComponent(document.cookie);
+            var ca = decodedCookie.split(';');
+            for(var i = 0; i <ca.length; i++) {
+                var c = ca[i];
+                while (c.charAt(0) == ' ') {
+                    c = c.substring(1);
+                }
+                if (c.indexOf(name) == 0) {
+                    return c.substring(name.length, c.length);
+                }
+            }
+            return "";
+        }
+
+        // Function to convert currencies
+        function convertCurrency(amount, fromCurrency, toCurrency) {
+            // Conversion rates
+            const conversionRates = {
+                gbp: 0.77,
+                usd: 1,
+                eur: 0.93
+            };
+
+            // Convert the amount
+            return amount * conversionRates[toCurrency] / conversionRates[fromCurrency];
+        }
+
+        // Function to get prices in the selected currency as a string
+        function getPriceString(amount, currency) {
+            const currencySymbols = {
+                gbp: '£',
+                usd: '$',
+                eur: '€'
+            };
+
+            return `${currencySymbols[currency]}${String(amount.toFixed(2))}`;
+        }
+    </script>
+</body>
+</html>

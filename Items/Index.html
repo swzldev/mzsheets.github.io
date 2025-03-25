@@ -74,10 +74,11 @@
 
         // Get query parameters
         const urlParams = new URLSearchParams(window.location.search);
-        const query = urlParams.get('query') ? urlParams.get('query').toLowerCase() : '';
+        let query = urlParams.get('query');
         const category = urlParams.get('category');
         const sortBy = urlParams.get('sort-by') ? urlParams.get('sort-by') : 'default';
-        const currency = urlParams.get('currency') ? urlParams.get('currency') : 'gbp';
+        // Currency may be stored in a cookie
+        const currency = getCookie('currency') ? getCookie('currency') : (urlParams.get('currency') ? urlParams.get('currency') : 'gbp');
         const itemsPerRow = urlParams.get('items-per-row') ? parseInt(urlParams.get('items-per-row')) : numItemsPerRow;
         const rowsPerPage = urlParams.get('rows') ? parseInt(urlParams.get('rows')) : numRowsPerPage;
         const currentPage = urlParams.get('page') ? parseInt(urlParams.get('page')) : 1;
@@ -95,6 +96,9 @@
         document.querySelector('.store-items-per-row-option').value = itemsPerRow;
         document.querySelector('.store-rows-per-page-option').value = rowsPerPage;
 
+        // Store currency as cookie
+        setCookie('currency', currency, 365);
+
         // Load the navbar
         fetch('../Components/navbar.html')
             .then(response => response.text())
@@ -102,30 +106,19 @@
                 document.getElementById('main-navbar').innerHTML = data;
 
                 // Set query if it exists
-                document.getElementById('navbar-search-input').value = query;
+                if (query) {
+                    document.getElementById('navbar-search-input').value = query;
+                    if (query.length > 0) {
+                        // Set the input box in focus
+                        document.getElementById('navbar-search-input').focus();
+                    }
+                }
+                updateSearchQuery(query);
 
                 // Handle search input
                 document.getElementById('navbar-search-input').addEventListener('input', (event) => {
                     const inQuery = event.target.value.toLowerCase(); // Get the search query
-
-                    const url = new URL(window.location);
-                    url.searchParams.set('query', inQuery);
-                    window.history.pushState({}, '', url);
-                    
-                    // Filter items by category
-                    let filteredItems = allItems;
-                    if (category) {
-                        filteredItems = filteredItems.filter(item => 
-                            item.category && item.category.toLowerCase() === category.toLowerCase()
-                        );
-                    }
-
-                    // Further filter items by the search query
-                    filteredItems = filteredItems.filter(item =>
-                        item.name.toLowerCase().includes(inQuery) || // Match item name
-                        (item.description && item.description.toLowerCase().includes(inQuery)) // Match description
-                    );
-                    displayItems(filteredItems);
+                    updateSearchQuery(inQuery);
                 });
 
                 // Handle sort by option
@@ -175,14 +168,7 @@
             .then(response => response.json())
             .then(items => {
                 allItems = items;
-
-                // Filter items by category if the 'category' parameter exists
-                if (category) {
-                    const filteredItems = allItems.filter(item => item.category && item.category.toLowerCase() === category.toLowerCase());
-                    displayItems(filteredItems);
-                } else {
-                    displayItems(items);
-                }
+                displayItems(allItems);
             })
             .catch(error => console.error('Error loading store items:', error));
 
@@ -206,11 +192,44 @@
             url.searchParams.set('page', newPage);
             window.location.href = url;
         });
+
+        // Update the current search query
+        function updateSearchQuery(nquery) {
+            // Update the URL with the new search query if it exists
+            const url = new URL(window.location);
+            query = nquery;
+            if (nquery !== null && nquery.length !== 0) {
+                url.searchParams.set('query', nquery);
+                window.history.pushState({}, '', url);
+                displayItems(allItems);
+                return;
+            }
+            if (url.searchParams.has('query')) {
+                url.searchParams.delete('query');
+                window.history.pushState({}, '', url);
+                displayItems(allItems);
+            }
+        }
     
         // Load the store content
         function displayItems(items) {
+            // Filter items by category
+            if (category) {
+                items = items.filter(item => 
+                    item.category && item.category.toLowerCase() === category.toLowerCase()
+                );
+            }
+
+            // Further filter items by the search query
+            if (query) {
+                items = items.filter(item =>
+                    item.name.toLowerCase().includes(query) || // Match item name
+                    (item.description && item.description.toLowerCase().includes(query)) // Match description
+                );
+            }
+
             const numItemsPerPage = itemsPerRow * rowsPerPage; // Number of items per page
-            const totalPages = Math.ceil(items.length / numItemsPerPage); // Calculate total pages
+            const totalPages = Math.max(1, Math.ceil(items.length / numItemsPerPage)); // Calculate total pages
 
             let page = currentPage;
 
@@ -275,7 +294,8 @@
                         itemCard.innerHTML = template;
 
                         // Populate the itemcard with data
-                        itemCard.querySelector('.item-card-content-container').href = item.link;
+                        //itemCard.querySelector('.item-card-content-container').href = item.link;
+                        itemCard.querySelector('.item-card-content-container').href = "../Item/?id=" + item.id;
                         itemCard.querySelector('.item-card-image').src = item.image;
                         itemCard.querySelector('.item-card-image').alt = item.name;
                         itemCard.querySelector('.item-card-title').textContent = item.name;
@@ -310,6 +330,31 @@
             };
 
             return `${currencySymbols[currency]}${String(amount.toFixed(2))}`;
+        }
+
+        // Function to set cookies
+        function setCookie(cname, cvalue, exdays) {
+            var d = new Date();
+            d.setTime(d.getTime() + (exdays*24*60*60*1000));
+            var expires = "expires="+ d.toUTCString();
+            document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+        }
+
+        // Function to get cookies
+        function getCookie(cname) {
+            var name = cname + "=";
+            var decodedCookie = decodeURIComponent(document.cookie);
+            var ca = decodedCookie.split(';');
+            for(var i = 0; i <ca.length; i++) {
+                var c = ca[i];
+                while (c.charAt(0) == ' ') {
+                    c = c.substring(1);
+                }
+                if (c.indexOf(name) == 0) {
+                    return c.substring(name.length, c.length);
+                }
+            }
+            return "";
         }
     </script>
 </body>
