@@ -3,11 +3,17 @@
         <a class="navbar-title" href="../Items/">MZSHEETS</a>
         <input type="text" spellcheck="false" placeholder="Search..." id="navbar-search-input">
         <ul>
-            <li><a onmouseenter="document.querySelector('.navbar-items-dropdown-container').style.display = 'block';">Items</a></li>
+            <li><a
+                onmouseleave="document.querySelector('.navbar-items-dropdown-container').style.display = 'none';"
+                onmouseenter="document.querySelector('.navbar-items-dropdown-container').style.display = 'block';"
+                >Items</a></li>
             <li><a href="../Wishlist/">Wishlist</a></li>
         </ul>
     </div>
-    <div onmouseleave="document.querySelector('.navbar-items-dropdown-container').style.display = 'none';" class="navbar-items-dropdown-container">
+    <div
+    onmouseleave="document.querySelector('.navbar-items-dropdown-container').style.display = 'none';"
+    class="navbar-items-dropdown-container"
+    >
         <ul class="navbar-items-dropdown">
             <li><h3>Clothing</h3></li>
             <li><a href="../Items/">All Items</a></li>
