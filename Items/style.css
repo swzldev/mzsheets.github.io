@@ -47,6 +47,14 @@ body {
     align-items: center;
     margin-right: 20px;
 }
+@media (max-width: 768px) {
+    .store-items-per-row-option {
+        color: red;
+    }
+    .store-rows-per-page-option {
+        color: red;
+    }
+}
 
 .store-controls {
     padding: 20px;
