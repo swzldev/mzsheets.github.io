@@ -48,11 +48,9 @@ body {
     margin-right: 20px;
 }
 @media (max-width: 768px) {
-    .store-items-per-row-option {
-        color: red;
-    }
-    .store-rows-per-page-option {
-        color: red;
+    .store-content-selection-container:nth-child(3), /* Items per row */
+    .store-content-selection-container:nth-child(4)  /* Rows per page */ {
+        display: none;
     }
 }
 
