@@ -218,20 +218,7 @@
     
         // Load the store content
         function displayItems(items) {
-            // Filter items by category
-            if (category) {
-                items = items.filter(item => 
-                    item.category && item.category.toLowerCase() === category.toLowerCase()
-                );
-            }
-
-            // Further filter items by the search query
-            if (query) {
-                items = items.filter(item =>
-                    item.name.toLowerCase().includes(query) || // Match item name
-                    (item.description && item.description.toLowerCase().includes(query)) // Match description
-                );
-            }
+            items = filterByQuery(items, query);
 
             const numItemsPerPage = itemsPerRow * rowsPerPage; // Number of items per page
             const totalPages = Math.max(1, Math.ceil(items.length / numItemsPerPage)); // Calculate total pages
@@ -311,6 +298,30 @@
                     });
                 })
                 .catch(error => console.error('Error loading itemcard component:', error));
+        }
+
+        // Function to filter items by search query
+        function filterByQuery(items, query) {
+            // Filter items by category
+            if (category) {
+                items = items.filter(item => 
+                    item.category && item.category.toLowerCase() === category.toLowerCase()
+                );
+            }
+
+            // Further filter items by the search query
+            if (query) {
+                // Searching uses a tokenized approach
+                query = query.toLowerCase().trim(); // Convert query to lowercase and remove leading/trailing whitespace
+                query = query.split(' '); // Tokenize query by spaces
+                // Filter items by query
+                items = items.filter(item => {
+                    // Check if the item name contains all query tokens
+                    return query.every(token => item.name.toLowerCase().includes(token));
+                });
+            }
+            
+            return items;
         }
 
         // Function to convert currencies
