@@ -33,7 +33,6 @@ body {
     .wishlist-container {
         width: 100%;
         border: none;
-        border-bottom: 1px solid #333;
     }
 }
 .wishlist-items-container {
@@ -62,6 +61,7 @@ body {
     margin: 0;
     padding: 0;
     text-align: right;
+    border: 1px solid #333;
 }
 .wishlist-summary-container h2 {
     font-family: 'Roboto Slab', sans-serif;
