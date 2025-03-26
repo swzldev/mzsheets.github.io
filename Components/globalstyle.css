@@ -81,8 +81,8 @@
     border: 1px solid #333;
     box-sizing: border-box;
     outline: none;
-    font-size: 0.8em;
-    padding: 10px;
+    font-size: 1em;
+    padding: 5px;
     margin: auto;
     width: 100%;
 }
