@@ -286,18 +286,68 @@
                         itemCard.innerHTML = template;
 
                         // Populate the itemcard with data
-                        //itemCard.querySelector('.item-card-content-container').href = item.link;
-                        itemCard.querySelector('.item-card-content-container').href = "../Item/?id=" + item.id;
+                        itemCard.querySelector('.item-card-content-container').addEventListener('click', () => {
+                            window.location.href = `../Item/?id=${item.id}`;
+                        });
                         itemCard.querySelector('.item-card-image').src = item.image;
                         itemCard.querySelector('.item-card-image').alt = item.name;
                         itemCard.querySelector('.item-card-title').textContent = item.name;
                         itemCard.querySelector('.item-card-price').textContent = `${getPriceString(convertCurrency(item.price, item.currency, currency), currency)}`;
+                        itemCard.querySelector('.item-card-wishlist-icon').src = findInWishlist(item) ? '../Data/Assets/star-yellow.png' : '../Data/Assets/star.png';
+                        itemCard.querySelector('.item-card-wishlist-icon').addEventListener('click', (event) => {
+                            // Swap icon
+                            const icon = event.target.src;
+                            if (icon.includes('star-yellow')) {
+                                removeFromWishlist(item);
+                                event.target.src = '../Data/Assets/star.png';
+                            } else {
+                                addToWishlist(item);
+                                event.target.src = '../Data/Assets/star-yellow.png';
+                            }
+                            
+                            // Prevent the event from propagating to the itemcard
+                            event.stopPropagation();
+                        });
 
                         // Append the populated itemcard to the container
                         container.appendChild(itemCard);
                     });
                 })
                 .catch(error => console.error('Error loading itemcard component:', error));
+        }
+
+        // Find item in wishlist
+        function findInWishlist(item) {
+            let wishlist = getCookie('wishlist');
+            wishlist = wishlist ? JSON.parse(wishlist) : [];
+            return wishlist.find(wishlistItem => wishlistItem.id === item.id);
+        }
+
+        // Remove item from wishlist
+        function removeFromWishlist(item) {
+            let wishlist = getCookie('wishlist');
+            wishlist = wishlist ? JSON.parse(wishlist) : [];
+            wishlist = wishlist.filter(wishlistItem => wishlistItem.id !== item.id);
+            setCookie('wishlist', JSON.stringify(wishlist), 365);
+        }
+
+        // Add an item to the wishlist
+        function addToWishlist(item) {
+            if (!item) {
+                alert('Item not found!');
+                return;
+            }
+
+            let wishlist = getCookie('wishlist');
+            wishlist = wishlist ? JSON.parse(wishlist) : [];
+
+            // Check if the item already exists in the wishlist by its ID
+            if (!wishlist.some(wishlistItem => wishlistItem.id === item.id)) {
+                wishlist.push(item);
+                setCookie('wishlist', JSON.stringify(wishlist), 365); // Store for 265 days
+            } else {
+                alert('Item is already in the wishlist!');
+            }
         }
 
         // Function to filter items by search query

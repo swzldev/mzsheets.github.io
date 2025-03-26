@@ -3,13 +3,22 @@
         <a class="navbar-title" href="../Items/">MZSHEETS</a>
         <input type="text" spellcheck="false" placeholder="Search..." id="navbar-search-input">
         <ul>
-            <li class="navbar-icon-normal-container navbar-search-icon"><a
-                onclick="const sDisplayMode=document.querySelector('.navbar-m-search-dropdown-container').style.display;document.querySelector('.navbar-m-search-dropdown-container').style.display=sDisplayMode==='block'?'none':'block';"
-                ><img class="navbar-icon-normal" src="../Data/Assets/magnifying-glass.png" alt="Search"></a></li>
             <li><a
+                class="navbar-item"
                 onclick="const iDisplayMode=document.querySelector('.navbar-items-dropdown-container').style.display;document.querySelector('.navbar-items-dropdown-container').style.display=iDisplayMode==='block'?'none':'block';"
-                >Items</a></li>
-            <li><a href="../Wishlist/">Wishlist</a></li>
+                >Items&nbsp;<div class="navbar-icon-normal-container"><img class="navbar-icon-normal" src="../Data/Assets/down-arrow.png" alt=""></div></a>
+            </li>
+            <li class="navbar-search-icon">
+                <a
+                class="navbar-item"
+                onclick="const sDisplayMode=document.querySelector('.navbar-m-search-dropdown-container').style.display;document.querySelector('.navbar-m-search-dropdown-container').style.display=sDisplayMode==='block'?'none':'block';"
+                ><div class="navbar-icon-normal-container"><img class="navbar-icon-normal" src="../Data/Assets/magnifying-glass.png" alt="Search"></div></a>
+            </li>
+            <li><a
+                class="navbar-item"
+                href="../Wishlist/"
+                ><div class="navbar-icon-normal-container"><img class="navbar-icon-normal" src="../Data/Assets/star.png" alt="Wishlist"></div></a>
+            </li>
         </ul>
     </div>
     <div

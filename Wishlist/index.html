@@ -84,9 +84,7 @@
                         listItem.querySelector('.wishlist-card-price').innerText = getPriceString(convertCurrency(item.price, item.currency, currency), currency);
                         
                         listItem.querySelector('.wishlist-card-remove').addEventListener('click', () => {
-                            // Remove the item from the wishlist
-                            const updatedWishlist = wishlist.filter(wishlistItem => wishlistItem.id !== item.id);
-                            setCookie('wishlist', JSON.stringify(updatedWishlist), 7);
+                            removeFromWishlist(wishlist, item);
                             displayWishlist();
                             updateSummary();
                         });
@@ -98,6 +96,12 @@
 
                 wishlistContainer.appendChild(listItem);
             });
+        }
+
+        // Function to remove item from wishlist
+        function removeFromWishlist(wishlist, item) {
+            const updatedWishlist = wishlist.filter(wishlistItem => wishlistItem.id !== item.id);
+            setCookie('wishlist', JSON.stringify(updatedWishlist), 365);
         }
 
         // Update the wishlist summary

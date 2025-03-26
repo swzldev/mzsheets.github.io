@@ -34,11 +34,12 @@ body {
 }
 .store-content-header select {
     font-family: 'Roboto Slab', sans-serif;
-    font-size: 0.6em;
+    font-size: 0.7em;
     color: #333;
     padding: 5px;
     border: 1px solid #333;
     border-radius: 0px;
+    cursor: pointer;
     outline: none;
 }
 .store-content-selection-container {
