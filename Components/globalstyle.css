@@ -141,14 +141,14 @@
     float: left;
     margin-right: 20px;
 }
-.search-m-icon {
+.navbar-search-icon {
     display: none;
 }
 @media (max-width: 768px) {
     #navbar-search-input {
         display: none;
     }
-    .search-m-icon {
+    .navbar-search-icon {
         display: block;
     }
 }
@@ -198,7 +198,7 @@
     object-fit: contain;
 }
 .item-card-wishlist-icon-container {
-    margin: 0 5px 0 auto;
+    margin: 0 0 0 auto;
 }
 .item-card-wishlist-icon {
     height: 21px;
@@ -226,7 +226,7 @@
 
 /* Wishlist card style */
 .component-wishlist-card {
-    background-color: white;
+    background-color: #fff;
     border: 1px solid #e0e0e0;
     display: flex;
     width: 100%;
@@ -234,11 +234,22 @@
     box-sizing: border-box;
     border-radius: 20px;
 }
+@media (max-width: 768px) {
+    .component-wishlist-card {
+        border-radius: 0px;
+        height: 150px;
+    }
+}
 .wishlist-card-image-container {
     height: auto;
     margin: auto auto auto 100px;
     overflow: hidden;
     padding: 0;
+}
+@media (max-width: 768px) {
+    .wishlist-card-image-container {
+        margin-left: 30px;
+    }
 }
 .component-wishlist-card img {
     max-width: 100%;
@@ -246,11 +257,22 @@
     margin: auto;
     object-fit: contain;
 }
+@media (max-width: 768px) {
+    .component-wishlist-card img {
+        max-height: 80px;
+    }
+}
 .wishlist-card-details {
     display: flex;
     flex-direction: column;
     margin: auto 100px;
     text-align: right;
+    width: 60%;
+}
+@media (max-width: 768px) {
+    .wishlist-card-details {
+        margin: auto 30px;
+    }
 }
 .wishlist-card-details h3 {
     font-family: "Roboto Slab", sans-serif;
@@ -261,6 +283,11 @@
     margin: 0;
     padding: 0;
 }
+@media (max-width: 768px) {
+    .wishlist-card-details h3 {
+        font-size: 0.7em;
+    }
+}
 .wishlist-card-details p {
     font-family: "Roboto Slab", sans-serif;
     font-optical-sizing: auto;
@@ -269,6 +296,11 @@
     color: #333;
     margin: 15px 0;
     padding: 0;
+}
+@media (max-width: 768px) {
+    .wishlist-card-details p {
+        font-size: 0.7em;
+    }
 }
 .wishlist-card-controls {
     margin: 10px 0 0 auto;
@@ -285,6 +317,11 @@
     border-radius: 0px;
     cursor: pointer;
     transition: color 200ms ease;
+}
+@media (max-width: 768px) {
+    .wishlist-card-controls a {
+        font-size: 0.5em;
+    }
 }
 .wishlist-card-controls button:hover, a:hover {
     color: #999;
