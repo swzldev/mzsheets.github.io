@@ -22,7 +22,7 @@
 .navbar-items-dropdown-container {
     display: none;
     position: absolute;
-    top: calc(100% + 1px);
+    top: 100%;
     left: 0;
     background-color: #f0f0f0;
     border-bottom: 1px solid #333;
@@ -69,7 +69,7 @@
 .navbar-m-search-dropdown-container {
     display: none;
     position: absolute;
-    top: calc(100% + 1px);
+    top: 100%;
     left: 0;
     background-color: #f0f0f0;
     border-bottom: 1px solid #333;
@@ -88,14 +88,17 @@
     margin: auto;
     width: 100%;
 }
+.navbar-icon-normal-container {
+    height: 21px;
+}
 .navbar-icon-normal {
     display: block;
     cursor: pointer;
-    height: 21px;
-    width: 21px;
+    height: 100%;
+    width: 100%;
     object-fit: contain;
-    padding: 0;
     margin: auto;
+    padding: 0;
 }
 .component-page-navbar a {
     font-family: 'Roboto Slab', sans-serif;
@@ -126,6 +129,7 @@
     outline: none;
 }
 .component-page-navbar ul {
+    display: flex;
     list-style-type: none;
     margin: 0;
     padding: 0;
@@ -133,7 +137,7 @@
 }
 .component-page-navbar ul li {
     float: left;
-    margin-right: 25px;
+    margin-right: 10px;
 }
 .search-m-icon {
     display: none;
