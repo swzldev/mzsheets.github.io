@@ -32,6 +32,8 @@ body {
 @media (max-width: 768px) {
     .wishlist-container {
         width: 100%;
+        border: none;
+        border-bottom: 1px solid #333;
     }
 }
 .wishlist-items-container {
