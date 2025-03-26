@@ -3,8 +3,11 @@
         <a class="navbar-title" href="../Items/">MZSHEETS</a>
         <input type="text" spellcheck="false" placeholder="Search..." id="navbar-search-input">
         <ul>
+            <li class="search-m-icon"><a
+                onclick="const sDisplayMode=document.querySelector('.navbar-m-search-dropdown-container').style.display;document.querySelector('.navbar-m-search-dropdown-container').style.display=sDisplayMode==='block'?'none':'block';"
+                ><img class="navbar-icon-normal" src="../Data/Assets/magnifying-glass.png" alt="Search"></a></li>
             <li><a
-                onclick="const displayMode = document.querySelector('.navbar-items-dropdown-container').style.display; document.querySelector('.navbar-items-dropdown-container').style.display = displayMode === 'block' ? 'none' : 'block';"
+                onclick="const iDisplayMode=document.querySelector('.navbar-items-dropdown-container').style.display;document.querySelector('.navbar-items-dropdown-container').style.display=iDisplayMode==='block'?'none':'block';"
                 >Items</a></li>
             <li><a href="../Wishlist/">Wishlist</a></li>
         </ul>
@@ -25,5 +28,8 @@
             <li><a href="../Items/?category=accessories">Accessories</a></li>
             <li><a href="../Items/?category=other-stuff">Other stuff</a></li>
         </ul>
+    </div>
+    <div class="navbar-m-search-dropdown-container">
+        <input type="text" spellcheck="false" placeholder="Search..." class="navbar-m-search-input">
     </div>
 </nav>
