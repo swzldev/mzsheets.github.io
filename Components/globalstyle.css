@@ -24,12 +24,12 @@
     position: absolute;
     top: 100%;
     left: 0;
-    background-color: #f0f0f0;
-    border-bottom: 1px solid #333;
+    background-color: #ffffff80;
     backdrop-filter: blur(20px);
+    border-bottom: 1px solid #333;
     box-sizing: border-box;
     width: 100%;
-    z-index: 1000;
+    z-index: 1010;
     padding: 50px;
 }
 .navbar-items-dropdown-container ul {
@@ -71,11 +71,12 @@
     position: absolute;
     top: 100%;
     left: 0;
-    background-color: #f0f0f0;
+    background-color: #ffffff80;
+    backdrop-filter: blur(20px);
     border-bottom: 1px solid #333;
     box-sizing: border-box;
     width: 100%;
-    z-index: 1000;
+    z-index: 1010;
     padding: 15px;
 }
 .navbar-m-search-input {

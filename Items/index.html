@@ -108,18 +108,17 @@
                 // Set query if it exists
                 if (query) {
                     document.getElementById('navbar-search-input').value = query;
+                    document.getElementById('navbar-m-search-input').value = query;
                     if (query.length > 0) {
-                        // Set the input box in focus
+                        // Set the input box in focus (desktop only)
                         document.getElementById('navbar-search-input').focus();
                     }
                 }
                 updateSearchQuery(query);
 
                 // Handle search input
-                document.getElementById('navbar-search-input').addEventListener('input', (event) => {
-                    const inQuery = event.target.value.toLowerCase(); // Get the search query
-                    updateSearchQuery(inQuery);
-                });
+                document.getElementById('navbar-search-input').addEventListener('input', handleSearchInput);
+                document.getElementById('navbar-m-search-input').addEventListener('input', handleSearchInput);
 
                 // Handle sort by option
                 document.querySelector('.store-sort-by-option').addEventListener('change', (event) => {
@@ -192,6 +191,12 @@
             url.searchParams.set('page', newPage);
             window.location.href = url;
         });
+
+        // Handle search query
+        function handleSearchInput(event) {
+            const inQuery = event.target.value.toLowerCase(); // Get the search query
+            updateSearchQuery(inQuery);
+        }
 
         // Update the current search query
         function updateSearchQuery(nquery) {
