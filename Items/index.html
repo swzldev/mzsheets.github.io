@@ -78,7 +78,7 @@
         const category = urlParams.get('category');
         const sortBy = urlParams.get('sort-by') ? urlParams.get('sort-by') : 'default';
         // Currency may be stored in a cookie
-        const currency = getCookie('currency') ? getCookie('currency') : (urlParams.get('currency') ? urlParams.get('currency') : 'gbp');
+        const currency = urlParams.get('currency') || getCookie('currency') || 'gbp';
         const itemsPerRow = urlParams.get('items-per-row') ? parseInt(urlParams.get('items-per-row')) : numItemsPerRow;
         const rowsPerPage = urlParams.get('rows') ? parseInt(urlParams.get('rows')) : numRowsPerPage;
         const currentPage = urlParams.get('page') ? parseInt(urlParams.get('page')) : 1;
