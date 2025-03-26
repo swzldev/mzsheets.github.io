@@ -33,6 +33,7 @@ body {
     .wishlist-container {
         width: 100%;
         border: none;
+        background-color: #eee;
     }
 }
 .wishlist-items-container {
